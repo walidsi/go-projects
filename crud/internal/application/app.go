@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/walidsi/go-projects/crud/models"
 	"github.com/walidsi/go-projects/crud/mysqldb"
@@ -218,9 +220,16 @@ func Run() error {
 
 	router := gin.Default()
 
-	router.GET("/ping", func(c *gin.Context) {
+	corsConfig := cors.DefaultConfig() // default config should allow localhost
+	corsConfig.AllowAllOrigins = true
+	//corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	//corsConfig.AllowHeaders = []string{"Origin"}
+	// Register the middleware
+	router.Use(cors.New(corsConfig))
+
+	router.GET("/info", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
+			"message": "Add CORS Default Config",
 		})
 	})
 
@@ -229,6 +238,8 @@ func Run() error {
 	router.GET("/blogs", listPosts)
 	router.DELETE("blog/:id", deletePost)
 	router.PUT("/blog/:id", updatePost)
+
+	log.Print("Listening on http://localhost:", os.Getenv("PORT"))
 
 	err := router.Run()
 
