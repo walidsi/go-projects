@@ -7,6 +7,6 @@ ADD . /app
 ## Specify that any commands will be executed inside app directory
 WORKDIR /app
 ## Start command that kicks off our the created binary executable
-CMD ["/app/main"]
+CMD ["/app/json2struct-web"]
 ## Expose port 80 for Azure App Service
 EXPOSE 8080
